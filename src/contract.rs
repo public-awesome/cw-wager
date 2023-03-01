@@ -20,6 +20,7 @@ use crate::state::{
 };
 
 // version info for migration info
+// [Major]: Contract name should probably be different :)
 const CONTRACT_NAME: &str = "crates.io:spark-blacklist";
 const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -242,7 +243,8 @@ fn query_config(deps: Deps) -> StdResult<ConfigResponse> {
     Ok(ConfigResponse { config })
 }
 
-#[allow(clippy::type_complexity)]
+// [Info]: This clippy is not needed
+// #[allow(clippy::type_complexity)]
 fn export_wager(v: Wager) -> WagerExport {
     WagerExport {
         amount: v.amount,

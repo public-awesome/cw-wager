@@ -13,6 +13,7 @@ use crate::state::{
     wagers, Currency, MatchmakingItem, Token, TokenStatus, Wager, CONFIG, MATCHMAKING,
 };
 
+// [Info]: This macro is not needed
 #[allow(clippy::too_many_arguments)]
 pub fn execute_wager(
     deps: DepsMut,
