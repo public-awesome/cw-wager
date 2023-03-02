@@ -270,12 +270,7 @@ fn try_update_config() {
     // Attempt to update config from non-admin address
     // Expects: failure
     let err = router
-        .execute_contract(
-            sender.clone(),
-            wager_contract.clone(),
-            &update_config_msg,
-            &[],
-        )
+        .execute_contract(sender, wager_contract.clone(), &update_config_msg, &[])
         .unwrap_err();
     assert_eq!(
         err.downcast::<ContractError>().unwrap(),
@@ -296,7 +291,7 @@ fn try_update_config() {
     let config_query_msg = QueryMsg::Config {};
     let config_response: ConfigResponse = router
         .wrap()
-        .query_wasm_smart(wager_contract.clone(), &config_query_msg)
+        .query_wasm_smart(wager_contract, &config_query_msg)
         .unwrap();
 
     assert_eq!(config_response.config.max_currencies, 2);
@@ -319,14 +314,14 @@ fn try_wager() {
     let mint_msg = vending_minter::msg::ExecuteMsg::Mint {};
     let res = router.execute_contract(
         creator.clone(),
-        Addr::unchecked("contract1").clone(),
+        Addr::unchecked("contract1"),
         &mint_msg,
         &[coin(MIN_MINT_PRICE, NATIVE_DENOM)],
     );
     assert!(res.is_ok());
     let res = router.execute_contract(
         creator.clone(),
-        Addr::unchecked("contract1").clone(),
+        Addr::unchecked("contract1"),
         &mint_msg,
         &[coin(MIN_MINT_PRICE, NATIVE_DENOM)],
     );
@@ -357,7 +352,7 @@ fn try_wager() {
     // Attempt to submit a wager from `sender`
     // Expects: success
     let res = router.execute_contract(
-        sender.clone(),
+        sender,
         wager_contract.clone(),
         &wager_msg,
         &[coin(100_000_000, NATIVE_DENOM)],
@@ -375,7 +370,7 @@ fn try_wager() {
     // Attempt to submit a wager from `peer`
     // Expects: success
     let res = router.execute_contract(
-        peer.clone(),
+        peer,
         wager_contract.clone(),
         &wager_msg,
         &[coin(100_000_000, NATIVE_DENOM)],
@@ -396,7 +391,7 @@ fn try_wager() {
             (collection.clone(), TOKEN1_ID as u64),
             (collection.clone(), TOKEN2_ID as u64),
         ),
-        winner: (collection.clone(), TOKEN2_ID as u64),
+        winner: (collection, TOKEN2_ID as u64),
     };
     let err = router
         .execute_contract(
@@ -419,12 +414,7 @@ fn try_wager() {
 
     // Attempt to set the wager as won
     // Expects: success
-    let res = router.execute_contract(
-        creator.clone(),
-        wager_contract.clone(),
-        &set_winner_msg,
-        &[],
-    );
+    let res = router.execute_contract(creator.clone(), wager_contract, &set_winner_msg, &[]);
     println!("{:?}", res);
     assert!(res.is_ok());
 }

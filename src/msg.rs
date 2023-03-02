@@ -46,6 +46,8 @@ pub enum ExecuteMsg {
 #[cw_serde]
 #[derive(QueryResponses)]
 pub enum QueryMsg {
+    // [Info]: Types that return a single value can just return the value directly, i.e:
+    // #[returns(Vec<WagerExport>)]
     #[returns(WagersResponse)]
     Wagers {},
     #[returns(WagerResponse)]
